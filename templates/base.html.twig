@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>{% block title %}Library{% endblock %}</title>
+        {% block stylesheets %}
+        {#{{ encore_entry_link_tags('app') }}#}
+        {% endblock %}
+    </head>
+    <body>
+        {% block header %}
+            <header>
+                <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                    <div class="container">
+                        <div class="collapse navbar-collapse" id="navbarColor">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item">
+                                    <a href="{{ path('library_index') }}" class="nav-link" id="booksList">Libraries</a>
+                                </li>
+                            </ul>
+                            <form class="form-inline">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+        {% endblock %}
+
+        <div class="container body-container">
+            {% block body %}
+
+            {% endblock %}
+        </div>
+
+        {% block javascripts %}
+        {#{{ encore_entry_script_tags('app') }}#}
+        {% endblock %}
+    </body>
+</html>

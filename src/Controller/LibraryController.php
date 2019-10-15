@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Repository\LibraryRepository;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,13 +18,24 @@ use Symfony\Component\Routing\Annotation\Route;
 class LibraryController extends AbstractController
 {
     /**
-     * @Route("/", methods={"GET"}, name="library_index")
-     * @param LibraryRepository $libraryRepository
+     * @var EntityManager
+     */
+    private $manager;
+
+    public function __construct(ObjectManager $manager)
+    {
+        $this->manager = $manager;
+    }
+
+    /**
+     * @Route("/{libId}", methods={"GET"}, name="library_index", requirements={"libId"="\d+"})
+     *
+     * @param int $libId
      * @return Response
      */
-    public function index(LibraryRepository $libraryRepository)
+    public function index(int $libId): Response
     {
-        $lib = $libraryRepository->findOneBy(['id' => 1]);
+        $lib = $this->manager->getRepository(LibraryRepository::class)->findOneBy(['id' => $libId]);
 
         return $this->render('library/index.html.twig', [
             'library' => $lib

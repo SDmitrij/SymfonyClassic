@@ -19,6 +19,17 @@ class LibraryRepository extends ServiceEntityRepository
         parent::__construct($registry, Library::class);
     }
 
+    /**
+     * @return array
+     */
+    public function getLibraryList()
+    {
+        return $this->createQueryBuilder('lib')
+            ->select('lib.id, lib.address')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
     // /**
     //  * @return Library[] Returns an array of Library objects
     //  */

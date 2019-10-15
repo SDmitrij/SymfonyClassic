@@ -3,22 +3,34 @@
 {% block title %}Library: {{ library.address }}{% endblock %}
 
 {% block body %}
-    <div class="">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Books</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for book in library.books %}
-                    <tr>
-                        <th scope="row">{{ book.id }}</th>
-                        <td>{{ book.title }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="row">
+        <div class="col-sm-xs">
+            <i class="fas fa-home fa-2x"></i>
+        </div>
+        <div class="col-sm-auto">
+            <h3><i>{{ library.address }} library</i></h3>
+        </div>
     </div>
+    <table class="table" data-libra-id="{{ library.id }}">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Book-title</th>
+                <th scope="col">Content</th>
+                <th scope="col">Author</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in library.books %}
+                <tr>
+                    <th scope="row">
+                        <i class="fas fa-book fa-2x"></i>
+                    </th>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.content }}</td>
+                    <td>{{ book.author.fullname }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

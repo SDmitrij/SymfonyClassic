@@ -24,16 +24,16 @@ class LibraryFixture extends Fixture
      */
     private $faker;
 
-    public function __construct()
-    {
-        $this->faker = Factory::create();
-    }
-
     private $literaryTypes = [
         'Drama', 'Prose', 'Myth', 'Short story', 'Novel', 'Folk tale', 'Poetry',
         'Autobiography and Biography', 'Essay', 'Literary Criticism', 'Travel Literature',
         'Diary', 'Journal', 'Frame Narrative', 'Outdoor Literature'
     ];
+
+    public function __construct()
+    {
+        $this->faker = Factory::create();
+    }
 
     /**
      * @param ObjectManager $manager
@@ -56,7 +56,7 @@ class LibraryFixture extends Fixture
         for($i = 0; $i < self::NUM_OF_ENTITIES; $i++)
         {
             $author = new Author($this->faker->firstName, $this->faker->lastName);
-            $book   = new Book($author, $this->faker->title, $this->faker->text,
+            $book   = new Book($author, $this->faker->text(50), $this->faker->text(700),
                 $this->literaryTypes[random_int(0, count($this->literaryTypes) - 1)]);
 
             $author->addBook($book);

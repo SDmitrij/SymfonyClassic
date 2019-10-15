@@ -5,24 +5,26 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <title>{% block title %}Library{% endblock %}</title>
         {% block stylesheets %}
-        {#{{ encore_entry_link_tags('app') }}#}
+            {{ encore_entry_link_tags('app') }}
         {% endblock %}
     </head>
     <body>
         {% block header %}
             <header>
-                <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
                     <div class="container">
                         <div class="collapse navbar-collapse" id="navbarColor">
                             <ul class="navbar-nav mr-auto">
                                 <li class="nav-item">
-                                    <a href="{{ path('library_index') }}" class="nav-link" id="booksList">Libraries</a>
+                                    <a href="{{ path('library_index') }}" class="nav-link" id="booksList">Dmitry Sidelev 602-I</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Libraries
+                                    </a>
+                                    {{ libs_drop_down|raw }}
                                 </li>
                             </ul>
-                            <form class="form-inline">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
-                            </form>
                         </div>
                     </div>
                 </nav>
@@ -30,13 +32,11 @@
         {% endblock %}
 
         <div class="container body-container">
-            {% block body %}
-
-            {% endblock %}
+            {% block body %}{% endblock %}
         </div>
 
         {% block javascripts %}
-        {#{{ encore_entry_script_tags('app') }}#}
+            {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </body>
 </html>

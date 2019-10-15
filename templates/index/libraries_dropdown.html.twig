@@ -1,0 +1,5 @@
+{% for libra in libraries %}
+    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <a class="dropdown-item" href="{{ path('library_index', {'libId': libra.id}) }}">{{ libra.address }} library</a>
+    </div>
+{% endfor %}

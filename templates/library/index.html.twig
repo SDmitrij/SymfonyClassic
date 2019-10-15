@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Library: {{ library.address }}{% endblock %}
+{% block title %}Library: {{ lib_addr }}{% endblock %}
 
 {% block body %}
     <div class="row">
@@ -8,29 +8,30 @@
             <i class="fas fa-home fa-2x"></i>
         </div>
         <div class="col-sm">
-            <h3><i>{{ library.address }} library</i></h3>
+            <h3><i>{{ lib_addr }} library</i></h3>
         </div>
     </div>
-    <table class="table" data-libra-id="{{ library.id }}">
-        <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col">Book-title</th>
-                <th scope="col">Content</th>
-                <th scope="col">Author</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for book in library.books %}
+    <div class="row">
+        <table class="table" data-libra-id="{{ lib_id }}">
+            <thead>
                 <tr>
-                    <th scope="row">
-                        <i class="fas fa-book fa-2x"></i>
-                    </th>
-                    <td>{{ book.title }}</td>
-                    <td>{{ book.content }}</td>
-                    <td>{{ book.author.fullname }}</td>
+                    <th scope="col"></th>
+                    <th scope="col">Book-title</th>
+                    <th scope="col">Content</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for book in pag_books.items %}
+                    <tr>
+                        <th scope="row">
+                            <i class="fas fa-book fa-2x"></i>
+                        </th>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.content }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {{ knp_pagination_render(pag_books) }}
+    </div>
 {% endblock %}

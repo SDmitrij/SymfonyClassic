@@ -18,7 +18,7 @@ class IndexController extends AbstractController
     {
         return $this->render('base.html.twig', [
             'libs_drop_down' => $this->render('index/libraries_dropdown.html.twig', [
-                'libraries' => $libraryRepository->getLibraryList()
+                'libraries'  => $libraryRepository->getLibListToDropDown()
             ])->getContent()
         ]);
     }

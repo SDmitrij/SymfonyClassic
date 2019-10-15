@@ -22,10 +22,23 @@ class LibraryRepository extends ServiceEntityRepository
     /**
      * @return array
      */
-    public function getLibraryList()
+    public function getLibListToDropDown(): array
     {
-        return $this->createQueryBuilder('lib')
-            ->select('lib.id, lib.address')
+        return $this->createQueryBuilder('l')
+            ->select('l.id, l.address')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function getLibBooksToPagination($id): array
+    {
+        return $this->createQueryBuilder('l')
+            ->addSelect('b', 'a')
+            ->innerJoin('l.books', 'b')
+            ->innerJoin('l.authors', 'a')
+            ->where('l.id = :id')
+            ->setParameter('id', $id)
+            ->orderBy('l.created', 'DESC')
             ->getQuery()
             ->getArrayResult();
     }

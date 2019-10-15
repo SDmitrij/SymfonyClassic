@@ -18,6 +18,7 @@ use Faker\Generator;
 class LibraryFixture extends Fixture
 {
     public const NUM_OF_ENTITIES = 100;
+    public const NUM_OF_LIBRAS   = 10;
 
     /**
      * @var Generator
@@ -68,14 +69,18 @@ class LibraryFixture extends Fixture
             $manager->persist($book);
         }
 
-        $libra = new Library(
-            new ArrayCollection($authors),
-            new ArrayCollection($books),
-            new ArrayCollection($types),
-            $this->faker->address
-        );
-
-        $manager->persist($libra);
+        $chunkedBooks   = array_chunk($books, self::NUM_OF_LIBRAS);
+        $chunkedAuthors = array_chunk($authors, self::NUM_OF_LIBRAS);
+        for($i = 0; $i < self::NUM_OF_LIBRAS; $i++)
+        {
+            $libra = new Library(
+                new ArrayCollection($chunkedAuthors[$i]),
+                new ArrayCollection($chunkedBooks[$i]),
+                new ArrayCollection($types),
+                $this->faker->address
+            );
+            $manager->persist($libra);
+        }
         $manager->flush();
     }
 }

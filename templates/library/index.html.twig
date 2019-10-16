@@ -8,7 +8,7 @@
 {% block title %}Library: {{ lib.address }}{% endblock %}
 
 {% block body %}
-    <div id="modal-placeholder"></div>
+    <div id="modal-placeholder" data-lib-id="{{ lib.id }}"></div>
     <div class="row">
         <div class="col-sm-xs">
             <i class="fas fa-home fa-2x"></i>
@@ -17,13 +17,13 @@
             <h3><i>{{ lib.address }} library</i></h3>
         </div>
         <div class="col-sm-xs">
-            <button type="button" class="btn btn-light" id="edit" data-lib-id="{{ lib.id }}">
+            <button type="button" class="btn btn-light" id="edit">
                 <span class="fas fa-edit"></span> Edit library
             </button>
-            <button type="button" class="btn btn-light" id="addBooks" data-lib-id="{{ lib.id }}">
+            <button type="button" class="btn btn-light" id="addBooks">
                 <span class="fas fa-plus"></span> Add new books
             </button>
-            <button type="button" class="btn btn-light" id="delete" data-lib-id="{{ lib.id }}">
+            <button type="button" class="btn btn-light" id="delete">
                 <span class="fas fa-trash"></span> Delete library
             </button>
         </div>

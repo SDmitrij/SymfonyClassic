@@ -56,17 +56,17 @@ class LibraryController extends AbstractController
     }
 
     /**
-     * @Route("/show_edit_form", methods={"GET"})
+     * @Route("/show_edit_modal", methods={"GET"})
      *
      * @param Request $request
      * @return Response
      * @throws ORMException
      */
-    public function showEditForm(Request $request): Response
+    public function showEditModal(Request $request): Response
     {
         $id = $request->get('id');
 
-        if ($id != "")
+        if ($id != '')
         {
             $lib = $this->manager->getReference(Library::class, $id);
             if ($lib instanceof Library)
@@ -84,6 +84,16 @@ class LibraryController extends AbstractController
     }
 
     /**
+     * @Route("/show_delete_modal", methods={"GET"})
+     * @return JsonResponse
+     */
+    public function showDeleteConfirmModal()
+    {
+        $deleteModal = $this->render('library/modal/delete.html.twig')->getContent();
+        return $this->json($deleteModal, 200);
+    }
+
+    /**
      * @Route("/edit", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
@@ -97,7 +107,7 @@ class LibraryController extends AbstractController
         $id   = $r->get('id');
         $addr = $r->get('address');
 
-        if ($id && $addr != "")
+        if ($id && $addr != '')
         {
             $lib = $this->manager->getRepository(Library::class)->findOneBy(['id' => $id]);
             if ($lib instanceof Library && $lib->getAddress() != $addr)
@@ -105,6 +115,28 @@ class LibraryController extends AbstractController
                 $lib->setAddress($addr);
                 $this->manager->flush();
                 return $this->json('Library updated.', 200);
+            }
+        }
+        return $this->json('Something wrong.', 400);
+    }
+
+    /**
+     * @Route("/delete", methods={"POST"})
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ORMException
+     */
+    public function delete(Request $request)
+    {
+        $id = $request->request->get('id');
+        if ($id != '')
+        {
+            $lib = $this->manager->getReference(Library::class, $id);
+            if ($lib instanceof Library)
+            {
+                $this->manager->remove($lib);
+                $this->manager->flush();
+                return $this->json('Library has been deleted successfully.', 200);
             }
         }
         return $this->json('Something wrong.', 400);

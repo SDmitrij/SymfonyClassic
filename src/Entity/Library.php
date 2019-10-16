@@ -132,6 +132,13 @@ class Library
         $this->literaryTypes->add($type);
     }
 
+    public function setAddress(string $addr)
+    {
+        $this->address = $addr;
+
+        return $this;
+    }
+
     /**
      * @ORM\PrePersist
      * @return void

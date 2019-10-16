@@ -3,16 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Library;
-use App\Form\LibraryType;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use function json_encode;
 
 /**
  * Class LibraryController
@@ -56,10 +56,11 @@ class LibraryController extends AbstractController
     }
 
     /**
-     * @Route("/edit_form", methods={"GET"}, name="libra_edit_form")
+     * @Route("/show_edit_form", methods={"GET"})
      *
      * @param Request $request
      * @return Response
+     * @throws ORMException
      */
     public function showEditForm(Request $request): Response
     {
@@ -67,21 +68,45 @@ class LibraryController extends AbstractController
 
         if ($id != "")
         {
-            $lib = $this->manager->getRepository(Library::class)->findOneBy(['id' => $id]);
+            $lib = $this->manager->getReference(Library::class, $id);
             if ($lib instanceof Library)
             {
-                $form = $this->createForm(LibraryType::class, $lib);
-
-                $modal = $this->render('library/modal_forms/edit.html.twig', [
-                    'form' => $form->createView()
+                $modal = $this->render('library/modal/edit.html.twig', [
+                    'address' => $lib->getAddress(),
+                    'id'      => $lib->getId()
                 ])->getContent();
 
-                return new JsonResponse(json_encode($modal), 200, [], true);
-            } else {
-                return new JsonResponse('Library entity is null.', 400);
+                return $this->json($modal, 200);
             }
-        } else {
-            return new JsonResponse('Library id is empty.', 400);
         }
+
+        return $this->json('Something wrong.', 400);
+    }
+
+    /**
+     * @Route("/edit", methods={"POST"})
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function edit(Request $request)
+    {
+        $r = $request->request;
+
+        $id   = $r->get('id');
+        $addr = $r->get('address');
+
+        if ($id && $addr != "")
+        {
+            $lib = $this->manager->getRepository(Library::class)->findOneBy(['id' => $id]);
+            if ($lib instanceof Library && $lib->getAddress() != $addr)
+            {
+                $lib->setAddress($addr);
+                $this->manager->flush();
+                return $this->json('Library updated.', 200);
+            }
+        }
+        return $this->json('Something wrong.', 400);
     }
 }

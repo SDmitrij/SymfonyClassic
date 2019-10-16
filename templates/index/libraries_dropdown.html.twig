@@ -1,5 +1,5 @@
 {% for lib in libraries %}
     <a class="dropdown-item"
-       href="{{ path('library_index', {'id': lib.id|default('1')}) }}">{{ lib.address }} library
+       href="{{ path('libra_index', {'id': lib.id|default('1')}) }}">{{ lib.address }} library
     </a>
 {% endfor %}

@@ -1,5 +1,5 @@
-@import "~bootstrap";
-@import "~@fortawesome/fontawesome-free";
+@import "~bootstrap/scss/bootstrap";
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
 
 .body-container {
   padding-left: 15px;
@@ -9,4 +9,11 @@
 .row {
   margin-left: 15px;
   margin-bottom: 15px;
+}
+.page-link {
+  color: #000000;
+}
+.page-item.active .page-link {
+  background-color: #000000;
+  border-color: #000000;
 }

@@ -30,17 +30,14 @@ class LibraryRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    public function getLibBooksToPagination($id): array
+    public function getLibBooksToPagination(int $id)
     {
         return $this->createQueryBuilder('l')
-            ->addSelect('b', 'a')
+            ->addSelect('b')
             ->innerJoin('l.books', 'b')
-            ->innerJoin('l.authors', 'a')
-            ->where('l.id = :id')
-            ->setParameter('id', $id)
-            ->orderBy('l.created', 'DESC')
+            ->where('l.id = ' . $id)
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
     }
 
     // /**

@@ -1,0 +1,46 @@
+<div class="modal fade" id="delete-book" tabindex="-1" role="dialog" aria-labelledby="Edit library" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Book-title</th>
+                                <th scope="col">Author</th>
+                                <th scope="col">Add</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for book in books_to_add %}
+                            <tr>
+                                <th scope="row">
+                                    <i class="fas fa-book"></i>
+                                </th>
+                                <td>{{ book.title }}</td>
+                                <td>{{ book.author.fullname }}</td>
+                                <td>
+                                    <div class="form-check">
+                                        <label>
+                                            <input class="form-check-input" data-book-id="{{ book.id }}" type="checkbox" value="">
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" disabled class="btn btn-light" data-save="modal">
+                    <span class="fas fa-plus"></span> Add this
+                </button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">
+                    <span class="fas fa-times"></span> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

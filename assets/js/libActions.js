@@ -32,6 +32,10 @@ $(function () {
     });
     // add new books
     $(document).on('click', '#addBooks', function () {
-
+        $.get('/library/book_list_to_add', { id: libId })
+            .done(function (data) {
+                modalPlaceholder.html(data);
+                modalPlaceholder.find('.modal').modal('show');
+            });
     });
 });

@@ -40,32 +40,13 @@ class LibraryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    // /**
-    //  * @return Library[] Returns an array of Library objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getBookListToAdd(int $id)
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('l.id', 'ASC')
-            ->setMaxResults(10)
+            ->addSelect('b')
+            ->innerJoin('l.books', 'b')
+            ->where('l.id != ' . $id)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Library
-    {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

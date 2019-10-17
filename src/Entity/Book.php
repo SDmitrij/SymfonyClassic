@@ -82,6 +82,11 @@ class Book
         return $this->author;
     }
 
+    public function getLiteraryType()
+    {
+        return $this->literaryType;
+    }
+
     /**
      * @ORM\PrePersist
      * @return void

@@ -20,15 +20,4 @@ class BookController extends AbstractController
             'controller_name' => 'BookController',
         ]);
     }
-
-    /**
-     * @Route("/book_list_add", methods={"GET"})
-     *
-     * @param Request $request
-     */
-    public function getBooksListToAdd(Request $request)
-    {
-       $libId = $request->get('id');
-
-    }
 }

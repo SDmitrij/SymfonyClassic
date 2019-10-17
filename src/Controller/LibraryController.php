@@ -141,4 +141,30 @@ class LibraryController extends AbstractController
         }
         return $this->json('Something wrong.', 400);
     }
+
+    /**
+     * @Route("/book_list_to_add", methods={"GET"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getBookListToAdd(Request $request)
+    {
+        $id = $request->get('id');
+        if ($id != '') {
+            $books = [];
+            $libs = $this->manager->getRepository(Library::class)->getBookListToAdd($id);
+            /** @var  Library $lib */
+            foreach ($libs as $lib)
+            {
+                $books[] = $lib->getBooks();
+            }
+            $booksToAdd = array_merge(...$books);
+            $booksToAddModal = $this->render('library/modal/add_new_books.html.twig', [
+                'books_to_add' => $booksToAdd
+            ])->getContent();
+
+            return $this->json($booksToAddModal, 200);
+        }
+        return $this->json('Something wrong', 400);
+    }
 }

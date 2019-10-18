@@ -49,14 +49,22 @@ $(function () {
         });
         modalPlaceholder.on('click', '[data-save="modal"]', function () {
             let table = modalPlaceholder.find('#booksToAdd');
-            let bookIdsToAdd;
-            table.find('.form-check-input').each(function (i, el) {
-               if (el.checked)
-               {
-                   bookIdsToAdd = el.dataset['bookId'];
+            let bookIdsToAdd = [];
+            table.find('.form-check-input').each(function (_, el) {
+               if (el.checked) {
+                   bookIdsToAdd.push(el.dataset['bookId']);
                }
             });
-            console.log(bookIdsToAdd);
+            if (bookIdsToAdd.length !== 0) {
+                $.post('/library/add_new_books', { id: libId, bookIds: bookIdsToAdd }).done(function (data) {
+                    if (data.status === true) {
+                        let popper = new Popper($(this), onBottomPopper, {
+                            placement: 'bottom'
+                        });
+                        location.href = '/library/' + libId;
+                    }
+                });
+            }
         });
     });
 });

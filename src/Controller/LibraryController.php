@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Book;
 use App\Entity\Library;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
@@ -102,8 +103,7 @@ class LibraryController extends AbstractController
      */
     public function edit(Request $request)
     {
-        $r = $request->request;
-
+        $r    = $request->request;
         $id   = $r->get('id');
         $addr = $r->get('address');
 
@@ -166,5 +166,34 @@ class LibraryController extends AbstractController
             return $this->json($booksToAddModal, 200);
         }
         return $this->json('Something wrong', 400);
+    }
+
+    /**
+     * @Route("/add_new_books", methods={"POST"})
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function addNewBooks(Request $request)
+    {
+        $r       = $request->request;
+        $libId   = $r->get('id');
+        $bookIds = $r->get('bookIds');
+
+        if (!empty($bookIds) && $libId != '') {
+            $booksToAdd = $this->manager->getRepository(Book::class)->findBy(['id' => $bookIds]);
+            /** @var Library $lib */
+            $lib = $this->manager->getRepository(Library::class)->findOneBy(['id' => $libId]);
+            if ($lib instanceof Library) {
+                foreach ($booksToAdd as $book) {
+                    $lib->addBook($book);
+                }
+                $this->manager->flush();
+                return $this->json(['status' => true, 'message' => 'Books have been already added'],
+                    200);
+            }
+        }
+        return $this->json(['status' => false, 'message' => 'Something wrong.'], 400);
     }
 }

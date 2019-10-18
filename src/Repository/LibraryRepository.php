@@ -35,7 +35,8 @@ class LibraryRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('l')
             ->addSelect('b')
             ->innerJoin('l.books', 'b')
-            ->where('l.id = ' . $id)
+            ->where('l.id = :id')
+            ->setParameter('id', $id)
             ->getQuery()
             ->getResult();
     }
@@ -45,7 +46,8 @@ class LibraryRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('l')
             ->addSelect('b')
             ->innerJoin('l.books', 'b')
-            ->where('l.id != ' . $id)
+            ->where('l.id != :id')
+            ->setParameter('id', $id)
             ->getQuery()
             ->getResult();
     }

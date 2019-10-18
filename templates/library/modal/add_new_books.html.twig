@@ -2,13 +2,14 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h3 class="modal-title" id="addContactLabel">Add new books</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <table class="table">
+                    <table class="table" id="booksToAdd">
                         <thead>
                             <tr>
                                 <th scope="col"></th>
@@ -25,10 +26,11 @@
                                 </th>
                                 <td>{{ book.title }}</td>
                                 <td>{{ book.author.fullname }}</td>
-                                <td>
+                                <td class="checkBoxCell">
                                     <div class="form-check">
                                         <label>
-                                            <input class="form-check-input" data-book-id="{{ book.id }}" type="checkbox" value="">
+                                            <input class="form-check-input" id="addCheckbox" data-book-id="{{ book.id }}"
+                                                   type="checkbox" value="">
                                         </label>
                                     </div>
                                 </td>

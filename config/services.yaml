@@ -25,3 +25,7 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    libra_drop_down_menu:
+        class: App\Service\LibraDropDownWidget
+        arguments: ['@service_container', '@twig']

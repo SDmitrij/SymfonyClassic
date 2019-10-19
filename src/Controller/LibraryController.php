@@ -151,16 +151,8 @@ class LibraryController extends AbstractController
     {
         $id = $request->get('id');
         if ($id != '') {
-            $books = [];
-            $libs = $this->manager->getRepository(Library::class)->getBookListToAdd($id);
-            /** @var  Library $lib */
-            foreach ($libs as $lib)
-            {
-                $books[] = $lib->getBooks();
-            }
-            $booksToAdd = array_merge(...$books);
             $booksToAddModal = $this->render('library/modal/add_new_books.html.twig', [
-                'books_to_add' => $booksToAdd
+                'books_to_add' => $this->manager->getRepository(Library::class)->getBooksToAdd($id)
             ])->getContent();
 
             return $this->json($booksToAddModal, 200);
@@ -190,7 +182,7 @@ class LibraryController extends AbstractController
                     $lib->addBook($book);
                 }
                 $this->manager->flush();
-                return $this->json(['status' => true, 'message' => 'Books have been already added'],
+                return $this->json(['status' => true, 'message' => 'Books have been already added.'],
                     200);
             }
         }

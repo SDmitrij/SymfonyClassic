@@ -1,8 +1,9 @@
 import $ from 'jquery'
+import Swal from 'sweetalert2'
 
 $(function () {
     const modalPlaceholder = $('#modal-placeholder');
-    const libId = modalPlaceholder.data('libId');
+    const libId            = modalPlaceholder.data('libId');
     // edit library
     $(document).on('click', '#edit', function () {
         $.get('/library/show_edit_modal/', {id: libId})
@@ -40,15 +41,22 @@ $(function () {
             });
         // disable or enable add button
         modalPlaceholder.on('change', '#addCheckbox', function () {
-            let saveBtn = modalPlaceholder.find('[data-save="modal"]');
-            if ($(this).is(':checked')) {
+            let saveBtn   = modalPlaceholder.find('[data-save="modal"]');
+            let table     = modalPlaceholder.find('#booksToAdd');
+            let boolCheck = false;
+            table.find('.form-check-input').each(function (_, el) {
+                if (el.checked) {
+                    boolCheck = true
+                }
+            });
+            if ($(this).is(':checked') || boolCheck) {
                 saveBtn.removeAttr('disabled');
             } else {
                 saveBtn.attr('disabled', true);
             }
         });
         modalPlaceholder.on('click', '[data-save="modal"]', function () {
-            let table = modalPlaceholder.find('#booksToAdd');
+            let table        = modalPlaceholder.find('#booksToAdd');
             let bookIdsToAdd = [];
             table.find('.form-check-input').each(function (_, el) {
                if (el.checked) {
@@ -58,10 +66,11 @@ $(function () {
             if (bookIdsToAdd.length !== 0) {
                 $.post('/library/add_new_books', { id: libId, bookIds: bookIdsToAdd }).done(function (data) {
                     if (data.status === true) {
-                        let popper = new Popper($(this), onBottomPopper, {
-                            placement: 'bottom'
+                        Swal.fire(data.message).then((result) => {
+                            if (result.value) {
+                                location.href = '/library/' + libId;
+                            }
                         });
-                        location.href = '/library/' + libId;
                     }
                 });
             }

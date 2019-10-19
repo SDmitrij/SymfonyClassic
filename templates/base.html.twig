@@ -23,9 +23,7 @@
                                         Libraries
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        {% if libs_drop_down is defined %}
-                                            {{ libs_drop_down|raw }}
-                                        {% endif %}
+                                        {{ libra_drop_down_widget.getLibraDropDownWidget()|raw }}
                                     </div>
                                 </li>
                             </ul>

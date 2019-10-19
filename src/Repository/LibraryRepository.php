@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Book;
 use App\Entity\Library;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\DBALException;
 
 /**
  * @method Library|null find($id, $lockMode = null, $lockVersion = null)
@@ -30,6 +32,10 @@ class LibraryRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param int $id
+     * @return mixed
+     */
     public function getLibBooksToPagination(int $id)
     {
         return $this->createQueryBuilder('l')
@@ -41,14 +47,24 @@ class LibraryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getBookListToAdd(int $id)
+    /**
+     * @param int $id
+     * @return array
+     * @throws DBALException
+     */
+    public function getBooksToAdd(int $id): array
     {
-        return $this->createQueryBuilder('l')
-            ->addSelect('b')
-            ->innerJoin('l.books', 'b')
-            ->where('l.id != :id')
-            ->setParameter('id', $id)
-            ->getQuery()
-            ->getResult();
+        $dc = $this->getEntityManager()->getConnection();
+        $sql = "SELECT id FROM book WHERE book.id NOT IN (SELECT book_id FROM libra_books 
+            WHERE libra_id = $id)";
+        $ids = [];
+        $stmt = $dc->executeQuery($sql);
+        while($res = $stmt->fetch()) {
+            $ids[] = $res['id'];
+        }
+        $booksToAdd = $this->getEntityManager()->getRepository(Book::class)
+            ->findBy(['id' => $ids]);
+
+        return $booksToAdd;
     }
 }

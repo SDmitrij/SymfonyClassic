@@ -1,20 +1,48 @@
 {% extends 'base.html.twig' %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('booksActions') }}
+{% endblock %}
 
-{% block title %}Hello BookController!{% endblock %}
+{% block title %}Books listing{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/dmitry/Development/library/src/Controller/BookController.php'|file_link(0) }}">src/Controller/BookController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/dmitry/Development/library/templates/book/index.html.twig'|file_link(0) }}">templates/book/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <div id="modal-placeholder"></div>
+    <h3>Books:</h3>
+    <div class="row">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Book-title</th>
+                <th scope="col">Content</th>
+                <th scope="col">Type</th>
+                <th scope="col">Author</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for book in pag_books %}
+                <tr>
+                    <th scope="row">
+                        <i class="fas fa-book fa-2x"></i>
+                    </th>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.content }}</td>
+                    <td>{{ book.literaryType}}</td>
+                    <td>{{ book.author.name ~' '~ book.author.surname }}</td>
+                    <td>
+                        <button type="button" class="btn btn-light">
+                            <span class="fas fa-trash"></span>
+                        </button>
+                        <button type="button" class="btn btn-light">
+                            <span class="fas fa-marker"></span>
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {{ knp_pagination_render(pag_books) }}
+    </div>
 {% endblock %}

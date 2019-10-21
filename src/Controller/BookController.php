@@ -7,6 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,5 +45,25 @@ class BookController extends AbstractController
         return $this->render('book/index.html.twig', [
             'pag_books' => $pagBooks
         ]);
+    }
+
+    /**
+     * @Route("/get_edit_modal", methods={"GET"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function editBookModal(Request $request): JsonResponse
+    {
+        $id = $request->get('id');
+        if ($id != '') {
+            $book = $this->manager->getRepository(Book::class)->find($id);
+            if ($book instanceof Book) {
+                $editBookModal = $this->render('book/modal/edit.html.twig',[
+                    'book' => $book
+                ])->getContent();
+                return $this->json($editBookModal, 200);
+            }
+        }
+        return $this->json('Something wrong.', 400);
     }
 }

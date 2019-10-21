@@ -26,10 +26,9 @@ class LibraDropDownWidget
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function getLibraDropDownWidget()
-    {
+    public function getLibraDropDownWidget(): string {
         $repo =
-            $this->container->get('doctrine.orm.entity_manager')
+            $this->container->get('doctrine')
                 ->getRepository(Library::class);
 
         return

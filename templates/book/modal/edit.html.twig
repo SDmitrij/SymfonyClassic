@@ -1,0 +1,39 @@
+<div class="modal fade" id="delete-book" tabindex="-1" role="dialog" aria-labelledby="Edit library" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="addContactLabel">Edit book</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <label>
+                        <input name="id" type="number" value="{{ book.id }}" hidden>
+                    </label>
+                    <div class="form-group">
+                        <label for="title" class="control-label">Title</label>
+                        <input name="title" type="text" value="{{ book.title }}" id="title" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="content" class="control-label">Content</label>
+                        <textarea name="content" type="text" id="content" class="form-control">{{ book.content }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="type" class="control-label">Type</label>
+                        <input name="type" type="text" value="{{ book.literaryType }}" id="type" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-save="modal">
+                    <span class="fas fa-save"></span> Save
+                </button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">
+                    <span class="fas fa-times"></span> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -32,11 +32,11 @@
                     <td>{{ book.literaryType}}</td>
                     <td>{{ book.author.name ~' '~ book.author.surname }}</td>
                     <td>
-                        <button type="button" class="btn btn-light">
+                        <button type="button" class="btn btn-light" id="deleteBook" data-book-id="{{ book.id }}">
                             <span class="fas fa-trash"></span>
                         </button>
-                        <button type="button" class="btn btn-light">
-                            <span class="fas fa-marker"></span>
+                        <button type="button" class="btn btn-light" id="editBook"  data-book-id="{{ book.id }}">
+                            <span class="fas fa-edit"></span>
                         </button>
                     </td>
                 </tr>

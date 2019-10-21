@@ -85,16 +85,6 @@ class LibraryController extends AbstractController
     }
 
     /**
-     * @Route("/show_delete_modal", methods={"GET"})
-     * @return JsonResponse
-     */
-    public function showDeleteConfirmModal()
-    {
-        $deleteModal = $this->render('library/modal/delete.html.twig')->getContent();
-        return $this->json($deleteModal, 200);
-    }
-
-    /**
      * @Route("/edit", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
@@ -182,7 +172,7 @@ class LibraryController extends AbstractController
                     $lib->addBook($book);
                 }
                 $this->manager->flush();
-                return $this->json(['status' => true, 'message' => 'Books have been already added.'],
+                return $this->json(['status' => true, 'message' => 'Books added.'],
                     200);
             }
         }

@@ -20,15 +20,36 @@ $(function () {
     });
     // delete library
     $(document).on('click', '#delete', function () {
-        $.get('/library/show_delete_modal')
-            .done(function (data) {
-                modalPlaceholder.html(data);
-                modalPlaceholder.find('.modal').modal('show');
-            });
-        modalPlaceholder.on('click', '[data-delete="modal"]', function () {
-            $.post('/library/delete', { id: libId }).done(function () {
-               location.href = '/';
-            });
+        let swalDelete = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-danger',
+                cancelButton: 'btn btn-light',
+            },
+            buttonsStyling: false
+        });
+        swalDelete.fire({
+            title: 'Are you sure?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+                $.post('/library/delete', { id: libId }).done(function () {
+                    swalDelete.fire(
+                        'Deleted!',
+                        'Library has been deleted.',
+                        'success'
+                    ).then(() => {
+                        location.href = "/";
+                    });
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalDelete.fire(
+                    'Cancelled'
+                );
+            }
         });
     });
     // add new books

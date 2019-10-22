@@ -51,7 +51,7 @@
                         <td>{{ book.literarytype}}</td>
                         <td>{{ book.author.fullname }}</td>
                         <td>
-                            <button type="button" class="btn btn-light">
+                            <button type="button" class="btn btn-light" id="removeFromLib" data-book-id="{{ book.id }}">
                                 <span class="fas fa-times"></span>
                             </button>
                         </td>

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Entity\LiteraryType;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Knp\Component\Pager\PaginatorInterface;
@@ -59,11 +60,31 @@ class BookController extends AbstractController
             $book = $this->manager->getRepository(Book::class)->find($id);
             if ($book instanceof Book) {
                 $editBookModal = $this->render('book/modal/edit.html.twig',[
-                    'book' => $book
+                    'book'           => $book,
+                    'literary_types' => $this->manager->getRepository(LiteraryType::class)
+                        ->getTypesToBookEdit($book->getLiteraryType())
                 ])->getContent();
                 return $this->json($editBookModal, 200);
             }
         }
         return $this->json('Something wrong.', 400);
+    }
+
+    /**
+     * @Route("/edit", methods={"POST"})
+     * @param Request $request
+     */
+    public function edit(Request $request)
+    {
+        $r = $request->request;
+        $id = $r->get('id');
+        if ($id != '') {
+            $book = $this->manager->getRepository(Book::class)->find($id);
+            if ($book instanceof Book) {
+                $title   = $r->get('title');
+                $content = $r->get('content');
+                $type    = $r->get('type');
+            }
+        }
     }
 }

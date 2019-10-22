@@ -9,5 +9,11 @@ $(function () {
             modalPlaceholder.html(data);
             modalPlaceholder.find('.modal').modal('show');
         });
+        modalPlaceholder.on('click', '[data-save="modal"]', function () {
+            let form = $(this).parents('.modal').find('form');
+            $.post('/book/edit', form.serialize()).done(function () {
+                modalPlaceholder.find('.modal').modal('hide');
+            });
+        });
     });
 });

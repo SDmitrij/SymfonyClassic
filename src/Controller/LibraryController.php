@@ -126,7 +126,8 @@ class LibraryController extends AbstractController
             {
                 $this->manager->remove($lib);
                 $this->manager->flush();
-                return $this->json('Library has been deleted successfully.', 200);
+                return $this->json(['status' => true,
+                    'message' => 'Library has been deleted successfully.'], 200);
             }
         }
         return $this->json('Something wrong.', 400);
@@ -177,5 +178,17 @@ class LibraryController extends AbstractController
             }
         }
         return $this->json(['status' => false, 'message' => 'Something wrong.'], 400);
+    }
+
+    /**
+     * @Route("/remove_book", methods={"GET"})
+     * @param Request $request
+     */
+    public function removeBook(Request $request)
+    {
+        $id = $request->get('id');
+        if ($id != '') {
+
+        }
     }
 }

@@ -20,35 +20,31 @@ $(function () {
     });
     // delete library
     $(document).on('click', '#delete', function () {
-        let swalDelete = Swal.mixin({
+        let swal = Swal.mixin({
             customClass: {
-                confirmButton: 'btn btn-danger',
-                cancelButton: 'btn btn-light',
+                confirmButton: 'btn btn-light',
+                cancelButton:  'btn btn-light',
             },
             buttonsStyling: false
         });
-        swalDelete.fire({
+        swal.fire({
             title: 'Are you sure?',
             type: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, cancel!',
+            confirmButtonText: '<span class ="fas fa-trash"></span> Yes',
+            cancelButtonText:  '<span class ="fas fa-times"></span> No',
             reverseButtons: true
         }).then((result) => {
             if (result.value) {
-                $.post('/library/delete', { id: libId }).done(function () {
-                    swalDelete.fire(
-                        'Deleted!',
-                        'Library has been deleted.',
-                        'success'
+                $.post('/library/delete', { id: libId }).done(function (data) {
+                    swal.fire(
+                        'Deleted!', data.message, 'success'
                     ).then(() => {
                         location.href = "/";
                     });
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel) {
-                swalDelete.fire(
-                    'Cancelled'
-                );
+                swal.fire('Cancelled').then(_ => {});
             }
         });
     });

@@ -21,8 +21,13 @@
                         <textarea name="content" type="text" id="content" class="form-control">{{ book.content }}</textarea>
                     </div>
                     <div class="form-group">
-                        <label for="type" class="control-label">Type</label>
-                        <input name="type" type="text" value="{{ book.literaryType }}" id="type" class="form-control">
+                        <label for="literaryType">Choose literary type</label>
+                        <select name="type" id="literaryType" class="form-control">
+                            <option>{{ book.literaryType }}</option>
+                            {% for type in literary_types %}
+                                <option>{{ type }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </form>
             </div>

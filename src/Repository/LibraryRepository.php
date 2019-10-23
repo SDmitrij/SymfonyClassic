@@ -67,4 +67,22 @@ class LibraryRepository extends ServiceEntityRepository
 
         return $booksToAdd;
     }
+
+    /**
+     * @param int $bookId
+     * @return array
+     * @throws DBALException
+     */
+    public function getLibraIdsToBookRemove(int $bookId): array
+    {
+        $dc = $this->getEntityManager()->getConnection();
+        $sql = "SELECT libra_id FROM libra_books WHERE book_id = $bookId";
+        $ids = [];
+        $stmt = $dc->executeQuery($sql);
+        while($res = $stmt->fetch()) {
+            $ids[] = $res['libra_id'];
+        }
+
+        return $ids;
+    }
 }

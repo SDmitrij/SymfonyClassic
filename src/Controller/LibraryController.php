@@ -91,7 +91,7 @@ class LibraryController extends AbstractController
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function edit(Request $request)
+    public function edit(Request $request): JsonResponse
     {
         $r    = $request->request;
         $id   = $r->get('id');
@@ -116,7 +116,7 @@ class LibraryController extends AbstractController
      * @return JsonResponse
      * @throws ORMException
      */
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         $id = $request->request->get('id');
         if ($id != '')
@@ -138,7 +138,7 @@ class LibraryController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function getBookListToAdd(Request $request)
+    public function getBookListToAdd(Request $request): JsonResponse
     {
         $id = $request->get('id');
         if ($id != '') {
@@ -158,7 +158,7 @@ class LibraryController extends AbstractController
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function addNewBooks(Request $request)
+    public function addNewBooks(Request $request): JsonResponse
     {
         $r       = $request->request;
         $libId   = $r->get('id');
@@ -183,12 +183,28 @@ class LibraryController extends AbstractController
     /**
      * @Route("/remove_book", methods={"GET"})
      * @param Request $request
+     * @return JsonResponse
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
-    public function removeBook(Request $request)
+    public function removeBook(Request $request): JsonResponse
     {
-        $id = $request->get('id');
-        if ($id != '') {
+        $libId  = $request->get('libId');
+        $bookId = $request->get('bookId');
 
+        if ($libId != '' && $bookId != '') {
+
+            $lib  = $this->manager->getRepository(Library::class)->find($libId);
+            $book = $this->manager->getRepository(Book::class)->find($bookId);
+
+            if ($lib instanceof Library && $book instanceof Book) {
+                $lib->removeBook($book);
+                $this->manager->merge($lib);
+                $this->manager->flush();
+
+                return $this->json(['message' => 'Book successfully removed.'], 200);
+            }
         }
+        return $this->json('Something wrong.', 400);
     }
 }

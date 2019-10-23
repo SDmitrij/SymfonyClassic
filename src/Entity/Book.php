@@ -72,9 +72,29 @@ class Book
         return $this->title;
     }
 
+    /**
+     * @param string $title
+     * @return Book
+     */
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+        return $this;
+    }
+
     public function getContent(): ?string
     {
         return $this->content;
+    }
+
+    /**
+     * @param string $content
+     * @return Book
+     */
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+        return $this;
     }
 
     public function getAuthor()
@@ -85,6 +105,16 @@ class Book
     public function getLiteraryType()
     {
         return $this->literaryType;
+    }
+
+    /**
+     * @param string $type
+     * @return $this
+     */
+    public function setLiteraryType(string $type): self
+    {
+        $this->literaryType = $type;
+        return $this;
     }
 
     /**

@@ -127,6 +127,11 @@ class Library
         $this->books->add($book);
     }
 
+    public function removeBook(Book $book)
+    {
+        $this->books->removeElement($book);
+    }
+
     public function addLitType(LiteraryType $type)
     {
         $this->literaryTypes->add($type);

@@ -93,4 +93,32 @@ $(function () {
             }
         });
     });
+    $(document).on('click', '#removeFromLib', function () {
+        let swal = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-light',
+                cancelButton:  'btn btn-light',
+            },
+            buttonsStyling: false
+        });
+        swal.fire({
+            title:             'Are you sure?',
+            type:              'warning',
+            showCancelButton:  true,
+            confirmButtonText: '<span class ="fas fa-trash"></span> Yes',
+            cancelButtonText:  '<span class ="fas fa-times"></span> No',
+            reverseButtons:    true
+        }).then((result) => {
+            if (result.value) {
+                $.get('/library/remove_book', { libId: libId, bookId: $(this).data('bookId') })
+                    .done(function (data) {
+                    swal.fire(data.message).then(() => {
+                        location.href = '/library/' + libId;
+                    });
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swal.fire('Cancelled').then(_ => {});
+            }
+        });
+    });
 });

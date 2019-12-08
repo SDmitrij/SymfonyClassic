@@ -67,7 +67,7 @@ class LibraryController extends AbstractController
     {
         $id = $request->get('id');
 
-        if ($id != '')
+        if ($id == '')
         {
             $lib = $this->manager->getReference(Library::class, $id);
             if ($lib instanceof Library)
@@ -141,14 +141,14 @@ class LibraryController extends AbstractController
     public function getBookListToAdd(Request $request): JsonResponse
     {
         $id = $request->get('id');
-        if ($id != '') {
-            $booksToAddModal = $this->render('library/modal/add_new_books.html.twig', [
-                'books_to_add' => $this->manager->getRepository(Library::class)->getBooksToAdd($id)
-            ])->getContent();
-
-            return $this->json($booksToAddModal, 200);
+        if ($id == '') {
+            return $this->json('Something wrong', 400);
         }
-        return $this->json('Something wrong', 400);
+        $booksToAddModal = $this->render('library/modal/add_new_books.html.twig', [
+            'books_to_add' => $this->manager->getRepository(Library::class)->getBooksToAdd($id)
+        ])->getContent();
+
+        return $this->json($booksToAddModal, 200);
     }
 
     /**
@@ -164,20 +164,21 @@ class LibraryController extends AbstractController
         $libId   = $r->get('id');
         $bookIds = $r->get('bookIds');
 
-        if (!empty($bookIds) && $libId != '') {
-            $booksToAdd = $this->manager->getRepository(Book::class)->findBy(['id' => $bookIds]);
-            /** @var Library $lib */
-            $lib = $this->manager->getRepository(Library::class)->findOneBy(['id' => $libId]);
-            if ($lib instanceof Library) {
-                foreach ($booksToAdd as $book) {
-                    $lib->addBook($book);
-                }
-                $this->manager->flush();
-                return $this->json(['status' => true, 'message' => 'Books added.'],
-                    200);
-            }
+        if (empty($bookIds) && $libId == '') {
+            return $this->json(['status' => false, 'message' => 'Something wrong.'], 400);
         }
-        return $this->json(['status' => false, 'message' => 'Something wrong.'], 400);
+        $booksToAdd = $this->manager->getRepository(Book::class)->findBy(['id' => $bookIds]);
+        /** @var Library $lib */
+        $lib = $this->manager->getRepository(Library::class)->findOneBy(['id' => $libId]);
+        if (!$lib instanceof Library) {
+            return $this->json('Not found.', 404);
+        }
+        foreach ($booksToAdd as $book) {
+            $lib->addBook($book);
+        }
+        $this->manager->flush();
+        return $this->json(['status' => true, 'message' => 'Books added.'],
+            200);
     }
 
     /**
@@ -192,19 +193,20 @@ class LibraryController extends AbstractController
         $libId  = $request->get('libId');
         $bookId = $request->get('bookId');
 
-        if ($libId != '' && $bookId != '') {
-
-            $lib  = $this->manager->getRepository(Library::class)->find($libId);
-            $book = $this->manager->getRepository(Book::class)->find($bookId);
-
-            if ($lib instanceof Library && $book instanceof Book) {
-                $lib->removeBook($book);
-                $this->manager->merge($lib);
-                $this->manager->flush();
-
-                return $this->json(['message' => 'Book successfully removed.'], 200);
-            }
+        if ($libId == '' && $bookId == '') {
+            return $this->json('Invalid ids.', 400);
         }
-        return $this->json('Something wrong.', 400);
+        $lib  = $this->manager->getRepository(Library::class)->find($libId);
+        $book = $this->manager->getRepository(Book::class)->find($bookId);
+
+        if (!($lib instanceof Library && $book instanceof Book)) {
+            return $this->json('Not found.', 404);
+        }
+
+        $lib->removeBook($book);
+        $this->manager->merge($lib);
+        $this->manager->flush();
+
+        return $this->json(['message' => 'Book successfully removed.'], 200);
     }
 }

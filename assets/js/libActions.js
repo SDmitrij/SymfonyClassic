@@ -61,7 +61,7 @@ $(function () {
             let saveBtn   = modalPlaceholder.find('[data-save="modal"]');
             let table     = modalPlaceholder.find('#booksToAdd');
             let boolCheck = false;
-            table.find('.form-check-input').each(function (_, el) {
+            table.find('.form-check-input').each(function (el) {
                 if (el.checked) {
                     boolCheck = true
                 }
@@ -75,7 +75,7 @@ $(function () {
         modalPlaceholder.on('click', '[data-save="modal"]', function () {
             let table        = modalPlaceholder.find('#booksToAdd');
             let bookIdsToAdd = [];
-            table.find('.form-check-input').each(function (_, el) {
+            table.find('.form-check-input').each(function (el) {
                if (el.checked) {
                    bookIdsToAdd.push(el.dataset['bookId']);
                }

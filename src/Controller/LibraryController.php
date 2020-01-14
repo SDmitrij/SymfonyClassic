@@ -50,10 +50,7 @@ class LibraryController extends AbstractController
         $pagBooks = $paginator->paginate($lib->getBooks(),
             $request->query->getInt('page', 1), self::LIMIT_PER_PAGE);
 
-        return $this->render('library/index.html.twig', [
-            'lib'       => $lib,
-            'pag_books' => $pagBooks
-        ]);
+        return $this->render('library/index.html.twig', ['lib' => $lib, 'pag_books' => $pagBooks]);
     }
 
     /**
@@ -66,22 +63,21 @@ class LibraryController extends AbstractController
     public function showEditModal(Request $request): Response
     {
         $id = $request->get('id');
-
         if ($id == '')
         {
-            $lib = $this->manager->getReference(Library::class, $id);
-            if ($lib instanceof Library)
-            {
-                $modal = $this->render('library/modal/edit.html.twig', [
-                    'address' => $lib->getAddress(),
-                    'id'      => $lib->getId()
-                ])->getContent();
-
-                return $this->json($modal, 200);
-            }
+            return $this->json('Something wrong.', 400);
         }
+        $lib = $this->manager->getReference(Library::class, $id);
+        if (!$lib instanceof Library)
+        {
+            return $this->json('Not found.', 404);
+        }
+        $modal = $this->render('library/modal/edit.html.twig', [
+            'address' => $lib->getAddress(),
+            'id'      => $lib->getId()
+        ])->getContent();
 
-        return $this->json('Something wrong.', 400);
+        return $this->json($modal, 200);
     }
 
     /**
@@ -97,17 +93,22 @@ class LibraryController extends AbstractController
         $id   = $r->get('id');
         $addr = $r->get('address');
 
-        if ($id && $addr != '')
+        if (($id && $addr) == '')
         {
-            $lib = $this->manager->getRepository(Library::class)->findOneBy(['id' => $id]);
-            if ($lib instanceof Library && $lib->getAddress() != $addr)
-            {
-                $lib->setAddress($addr);
-                $this->manager->flush();
-                return $this->json('Library updated.', 200);
-            }
+            return $this->json('Something wrong.', 400);
         }
-        return $this->json('Something wrong.', 400);
+        $lib = $this->manager->getRepository(Library::class)->findOneBy(['id' => $id]);
+        if (!$lib instanceof Library)
+        {
+            return $this->json('Not found.', 404);
+        }
+        if ($lib->getAddress() == $addr) {
+            return $this->json('The library address is the same.', 200);
+        }
+        $lib->setAddress($addr);
+        $this->manager->flush();
+
+        return $this->json('Library updated.', 200);
     }
 
     /**
@@ -119,18 +120,19 @@ class LibraryController extends AbstractController
     public function delete(Request $request): JsonResponse
     {
         $id = $request->request->get('id');
-        if ($id != '')
+        if ($id == '')
         {
-            $lib = $this->manager->getReference(Library::class, $id);
-            if ($lib instanceof Library)
-            {
-                $this->manager->remove($lib);
-                $this->manager->flush();
-                return $this->json(['status' => true,
-                    'message' => 'Library has been deleted successfully.'], 200);
-            }
+            return $this->json('Something wrong.', 400);
         }
-        return $this->json('Something wrong.', 400);
+        $lib = $this->manager->getReference(Library::class, $id);
+        if (!$lib instanceof Library)
+        {
+            return $this->json('Not found.', 404);
+        }
+        $this->manager->remove($lib);
+        $this->manager->flush();
+
+        return $this->json(['status' => true, 'message' => 'Library has been deleted successfully.'], 200);
     }
 
     /**
@@ -177,8 +179,8 @@ class LibraryController extends AbstractController
             $lib->addBook($book);
         }
         $this->manager->flush();
-        return $this->json(['status' => true, 'message' => 'Books added.'],
-            200);
+
+        return $this->json(['status' => true, 'message' => 'Books added.'], 200);
     }
 
     /**

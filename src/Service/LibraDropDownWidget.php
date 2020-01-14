@@ -27,13 +27,8 @@ class LibraDropDownWidget
      * @throws SyntaxError
      */
     public function getLibraDropDownWidget(): string {
-        $repo =
-            $this->container->get('doctrine')
-                ->getRepository(Library::class);
+        $repo = $this->container->get('doctrine')->getRepository(Library::class);
 
-        return
-            $this->twig->render('index/libraries_dropdown.html.twig', [
-                'libraries'  => $repo->getLibListToDropDown()
-            ]);
+        return $this->twig->render('index/libraries_dropdown.html.twig', ['libraries'  => $repo->getLibListToDropDown()]);
     }
 }

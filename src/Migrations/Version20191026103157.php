@@ -28,7 +28,7 @@ final class Version20191026103157 extends AbstractMigration
                         FOR EACH ROW
                         BEGIN
                             INSERT INTO book_search (search_content, book_id) 
-                            VALUES ((SELECT CONCAT(title, ' ', content) FROM book WHERE id = LAST_INSERT_ID()), LAST_INSERT_ID());
+                            VALUES ((SELECT CONCAT('title', ' ', 'content') FROM book WHERE id = LAST_INSERT_ID()), LAST_INSERT_ID());
                         END");
     }
 

@@ -63,7 +63,7 @@ class LibraryController extends AbstractController
     public function showEditModal(Request $request): Response
     {
         $id = $request->get('id');
-        if ($id == '')
+        if (!$id)
         {
             return $this->json('Something wrong.', 400);
         }
@@ -93,7 +93,7 @@ class LibraryController extends AbstractController
         $id   = $r->get('id');
         $addr = $r->get('address');
 
-        if (($id && $addr) == '')
+        if (!($id && $addr))
         {
             return $this->json('Something wrong.', 400);
         }
@@ -120,7 +120,7 @@ class LibraryController extends AbstractController
     public function delete(Request $request): JsonResponse
     {
         $id = $request->request->get('id');
-        if ($id == '')
+        if (!$id)
         {
             return $this->json('Something wrong.', 400);
         }
@@ -143,7 +143,7 @@ class LibraryController extends AbstractController
     public function getBookListToAdd(Request $request): JsonResponse
     {
         $id = $request->get('id');
-        if ($id == '') {
+        if (!$id) {
             return $this->json('Something wrong', 400);
         }
         $booksToAddModal = $this->render('library/modal/add_new_books.html.twig', [
@@ -166,7 +166,7 @@ class LibraryController extends AbstractController
         $libId   = $r->get('id');
         $bookIds = $r->get('bookIds');
 
-        if (empty($bookIds) && $libId == '') {
+        if (empty($bookIds) && !$libId) {
             return $this->json(['status' => false, 'message' => 'Something wrong.'], 400);
         }
         $booksToAdd = $this->manager->getRepository(Book::class)->findBy(['id' => $bookIds]);
@@ -195,7 +195,7 @@ class LibraryController extends AbstractController
         $libId  = $request->get('libId');
         $bookId = $request->get('bookId');
 
-        if ($libId == '' && $bookId == '') {
+        if (!($libId && $bookId)) {
             return $this->json('Invalid ids.', 400);
         }
         $lib  = $this->manager->getRepository(Library::class)->find($libId);

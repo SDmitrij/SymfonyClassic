@@ -58,7 +58,7 @@ class BookController extends AbstractController
     public function editBookModal(Request $request): JsonResponse
     {
         $id = $request->get('id');
-        if ($id) {
+        if (!$id) {
             return $this->json('Invalid id.', 400);
         }
         $book = $this->manager->getRepository(Book::class)->find($id);
@@ -84,7 +84,7 @@ class BookController extends AbstractController
         $r = $request->request;
 
         $id = $r->get('id');
-        if ($id) {
+        if (!$id) {
             return $this->json('Invalid id.', 400);
         }
         $book = $this->manager->getRepository(Book::class)->find($id);
@@ -97,7 +97,7 @@ class BookController extends AbstractController
         $content = $r->get('content');
         $type    = $r->get('type');
 
-        if ($title != ''
+        if ($title
             && $bookToEdit->getTitle() != $title) {
             $bookToEdit->setTitle($title);
         }
@@ -127,7 +127,7 @@ class BookController extends AbstractController
     public function delete(Request $request) : JsonResponse
     {
         $id = $request->get('id');
-        if ($id)
+        if (!$id)
         {
             return $this->json('Invalid id.', 400);
         }

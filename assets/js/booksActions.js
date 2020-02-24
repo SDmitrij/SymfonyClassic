@@ -13,6 +13,7 @@ $(function () {
             let form = $(this).parents('.modal').find('form');
             $.post('/book/edit', form.serialize()).done(function (data) {
                 modalPlaceholder.find('.modal').modal('hide');
+                location.href = "/book";
             });
         });
     });

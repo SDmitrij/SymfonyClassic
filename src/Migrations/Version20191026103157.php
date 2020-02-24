@@ -14,7 +14,7 @@ final class Version20191026103157 extends AbstractMigration
 {
     public function getDescription() : string
     {
-        return '';
+        return 'Listen insertions to book table...';
     }
 
     public function up(Schema $schema) : void
@@ -28,7 +28,7 @@ final class Version20191026103157 extends AbstractMigration
                         FOR EACH ROW
                         BEGIN
                             INSERT INTO book_search (search_content, book_id) 
-                            VALUES (CONCAT('title', ' ', 'content'), LAST_INSERT_ID());
+                            VALUES (CONCAT(NEW.title, ' ', NEW.content), new.id);
                         END");
     }
 

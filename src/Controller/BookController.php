@@ -91,31 +91,25 @@ class BookController extends AbstractController
         if (!$book instanceof Book) {
             return $this->json('Not found.', 404);
         }
-        $bookToEdit = clone $book;
 
         $title   = $r->get('title');
         $content = $r->get('content');
         $type    = $r->get('type');
 
         if ($title
-            && $bookToEdit->getTitle() != $title) {
-            $bookToEdit->setTitle($title);
+            && $book->getTitle() != $title) {
+            $book->setTitle($title);
         }
         if ($content
-            && $bookToEdit->getContent() != $content) {
-            $bookToEdit->setContent($content);
+            && $book->getContent() != $content) {
+            $book->setContent($content);
         }
         if ($type
-            && $bookToEdit->getLiteraryType() != $type) {
-            $bookToEdit->setLiteraryType($type);
+            && $book->getLiteraryType() != $type) {
+            $book->setLiteraryType($type);
         }
-        if ($book !== $bookToEdit) {
-            $this->manager->merge($bookToEdit);
             $this->manager->flush();
-            return $this->json('Book updated.', 200);
-        } else {
             return $this->json('Nothing to update.', 200);
-        }
     }
 
     /**

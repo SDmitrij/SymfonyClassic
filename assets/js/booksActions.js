@@ -2,7 +2,7 @@ import $ from 'jquery'
 import Swal from 'sweetalert2'
 
 $(function () {
-    const modalPlaceholder = $('#modal-placeholder');
+    var modalPlaceholder = $('#modal-placeholder');
 
     $(document).on('click', '#editBook', function () {
         $.get('/book/get_edit_modal', { id: $(this).data('bookId') }).done(function (data) {
@@ -13,7 +13,7 @@ $(function () {
             let form = $(this).parents('.modal').find('form');
             $.post('/book/edit', form.serialize()).done(function (data) {
                 modalPlaceholder.find('.modal').modal('hide');
-                location.href = "/book";
+                location.href = window.location.href;
             });
         });
     });

@@ -132,11 +132,6 @@ class Library
         $this->books->removeElement($book);
     }
 
-    public function addLitType(LiteraryType $type)
-    {
-        $this->literaryTypes->add($type);
-    }
-
     public function setAddress(string $addr)
     {
         $this->address = $addr;
